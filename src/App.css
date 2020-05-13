@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap");
+
+body {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+.container {
+  display: block;
+  margin: 60px 20%;
+}
+
+.app-container {
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  max-width: 800px;
+  padding: 20px 50px;
+  min-height: 250px;
+}
+
+div {
+  display: block;
+}
+
+.App h1.title {
+  color: #df7861;
+  margin: 20px 0;
+}
+
+.App small {
+  margin-top: 20px;
+}
