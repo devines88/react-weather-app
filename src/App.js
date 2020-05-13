@@ -24,7 +24,7 @@ function App() {
           </a>
           <span>, hosted on </span>
           <a
-            href="https://gifted-panini-d6d4b5.netlify.app"
+            href="https://heuristic-borg-ffda2b.netlify.app/"
             target="_blank"
             rel="noOpener noReferrer"
           >
