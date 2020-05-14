@@ -1,3 +1,7 @@
+.WeatherInfo {
+  margin-top: 3px;
+}
+
 .WeatherInfo .current-city {
   text-align: left;
   padding: 0px;
@@ -14,13 +18,17 @@
   color: #928a97;
 }
 
+.WeatherInfo .current-day-time {
+  margin-top: 5px;
+}
+
 .WeatherInfo .current-temperature,
 .WeatherInfo .weather-stats {
   margin-top: 20px;
 }
 
 .WeatherInfo .weather-stats .row {
-  font-size: 13px;
+  font-size: 15px;
   margin-bottom: -3px;
 }
 

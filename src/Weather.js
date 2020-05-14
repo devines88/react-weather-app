@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import WeatherInfo from "./WeatherInfo";
+import Spinner from "./Spinner";
 import axios from "axios";
 
 import "./Weather.css";
 
-function Weather() {
-  let [city, setCity] = useState("Lisbon");
-  let [unitSystem, setUnitSystem] = useState("metric");
-  let [weatherResults, setWeatherResults] = useState(Object);
+function Weather(props) {
+  let [city, setCity] = useState(props.city);
+  let [unitSystem, setUnitSystem] = useState(props.unitSystem);
+  let [weatherResults, setWeatherResults] = useState({
+    hasResults: false,
+  });
 
   function updateCity(event) {
     let newCity = event.target.value.trim();
@@ -17,19 +20,24 @@ function Weather() {
   }
 
   function getCurrentLocationWeather() {
-    //   navigator.geolocation.getCurrentPosition(function (position) {
-    //     setLoading(true);
-    //     getCityWeather(
-    //       null,
-    //       position.coords.latitude,
-    //       position.coords.longitude,
-    //       unitSystem
-    //     );
-    //   });
+    setWeatherResults({
+      hasResults: false,
+    });
+    navigator.geolocation.getCurrentPosition(function (position) {
+      getCityWeather(
+        null,
+        position.coords.latitude,
+        position.coords.longitude,
+        unitSystem
+      );
+    });
   }
 
   function handleSubmit(event) {
     event.preventDefault();
+    setWeatherResults({
+      hasResults: false,
+    });
     if (city) {
       // setLoading(true);
       getCityWeather(city, null, null, unitSystem);
@@ -51,6 +59,7 @@ function Weather() {
 
   function updateWeather(response) {
     setWeatherResults({
+      hasResults: true,
       cityName: response.data.city.name,
       temperature: Math.round(response.data.list[0].main.temp),
       unitSystem: unitSystem,
@@ -100,10 +109,14 @@ function Weather() {
           </form>
         </div>
       </div>
-      <WeatherInfo
-        weatherData={weatherResults}
-        // onChildClick={handleChildClick}
-      />
+      {weatherResults.hasResults ? (
+        <WeatherInfo
+          weatherData={weatherResults}
+          // onChildClick={handleChildClick}
+        />
+      ) : (
+        <Spinner />
+      )}
     </div>
   );
 }

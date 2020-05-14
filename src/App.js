@@ -13,7 +13,7 @@ function App() {
               <h1 className="title">Weather Forecast</h1>
             </div>
           </div>
-          <Weather />
+          <Weather city="Lisbon" unitSystem="metric" />
         </div>
         <small>
           <span>Open-source code by Inês Nunes on </span>
