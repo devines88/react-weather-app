@@ -1,4 +1,5 @@
 import React from "react";
+import Weather from "./Weather";
 
 import "./App.css";
 
@@ -12,6 +13,7 @@ function App() {
               <h1 className="title">Weather Forecast</h1>
             </div>
           </div>
+          <Weather />
         </div>
         <small>
           <span>Open-source code by Inês Nunes on </span>
