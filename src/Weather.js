@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import WeatherInfo from "./WeatherInfo";
 import axios from "axios";
 
 import "./Weather.css";
@@ -6,7 +7,7 @@ import "./Weather.css";
 function Weather() {
   let [city, setCity] = useState("Lisbon");
   let [unitSystem, setUnitSystem] = useState("metric");
-  let [weatherData, setWeatherData] = useState(Object);
+  let [weatherResults, setWeatherResults] = useState(Object);
 
   function updateCity(event) {
     let newCity = event.target.value.trim();
@@ -49,7 +50,16 @@ function Weather() {
   }
 
   function updateWeather(response) {
-    console.log(response);
+    setWeatherResults({
+      cityName: response.data.city.name,
+      temperature: Math.round(response.data.list[0].main.temp),
+      unitSystem: unitSystem,
+      description: response.data.list[0].weather[0].description,
+      humidity: response.data.list[0].main.humidity,
+      wind: Math.round(response.data.list[0].wind.speed),
+      dateTime: response.data.list[0].dt,
+      weatherIcon: `http://openweathermap.org/img/wn/${response.data.list[0].weather[0].icon}@2x.png`,
+    });
   }
 
   return (
@@ -90,6 +100,10 @@ function Weather() {
           </form>
         </div>
       </div>
+      <WeatherInfo
+        weatherData={weatherResults}
+        // onChildClick={handleChildClick}
+      />
     </div>
   );
 }
