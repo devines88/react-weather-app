@@ -28,10 +28,10 @@ function WeatherInfo(props) {
 
   function convertUnitSystem(event) {
     event.preventDefault();
-    return null;
-    // let units =
-    //   props.weatherData.unitSystem === "metric" ? "imperial" : "metric";
-    // props.onChildClick(props.weatherData.cityName, units);
+    props.onChangeUnitSystem(
+      props.weatherData.cityName,
+      props.weatherData.unitSystem === "metric" ? "imperial" : "metric"
+    );
   }
 
   return (
@@ -87,16 +87,10 @@ function WeatherInfo(props) {
           </div>
         </div>
         <div className="col-5 weather-stats">
+          <div className="row">Humidity: {props.weatherData.humidity}%</div>
           <div className="row">
-            Humidity:&nbsp;
-            <span id="humidity">{props.weatherData.humidity}%</span>
-          </div>
-          <div className="row">
-            Wind:&nbsp;
-            <span id="wind">{props.weatherData.wind}</span>
-            <span id="wind-unit">
-              {props.weatherData.unitSystem === "metric" ? "m/s" : "mph"}
-            </span>
+            Wind: {props.weatherData.wind}{" "}
+            {props.weatherData.unitSystem === "metric" ? "m/s" : "mph"}
           </div>
         </div>
       </div>
