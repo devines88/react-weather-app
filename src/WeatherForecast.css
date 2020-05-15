@@ -1,21 +1,7 @@
 .WeatherForecast {
-  margin-top: 10px;
-}
-.WeatherForecast .week-days {
-  color: #ecb390;
-  font-size: 18px;
+  margin: 15px auto;
 }
 
-.WeatherForecast .week-temperatures {
-  color: #928a97;
-}
-
-.WeatherForecast .forecast-section {
+.forecast-section {
   text-align: center;
-}
-
-.WeatherForecast #forecast-icon {
-  display: block;
-  margin: 0px auto;
-  width: 60px;
 }

@@ -1,0 +1,14 @@
+.ForecastDetail .week-days {
+  color: #ecb390;
+  font-size: 18px;
+}
+
+.ForecastDetail .week-temperatures {
+  color: #928a97;
+}
+
+.ForecastDetail #forecast-icon {
+  display: block;
+  margin: 0px auto;
+  width: 60px;
+}
