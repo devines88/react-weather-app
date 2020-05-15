@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import WeatherInfo from "./WeatherInfo";
-import WeatherForecast from "./WeatherForecast";
+import ForecastDetail from "./ForecastDetail";
 import Spinner from "./Spinner";
 import axios from "axios";
 
@@ -10,6 +10,10 @@ function Weather(props) {
   const [city, setCity] = useState(props.city);
   const [unitSystem, setUnitSystem] = useState(props.unitSystem);
   const [weatherData, setWeatherData] = useState({ hasData: false });
+
+  useEffect(() => {
+    getCityWeather(city, null, null, unitSystem);
+  }, [unitSystem]);
 
   function updateCity(event) {
     let newCity = event.target.value.trim();
@@ -78,7 +82,7 @@ function Weather(props) {
       let date = new Date(forecastList[i].dt * 1000);
       data.push({
         day: days[date.getDay()],
-        temp: forecastList[i].main.temp,
+        temp: Math.round(forecastList[i].main.temp),
         icon: `http://openweathermap.org/img/wn/${forecastList[i].weather[0].icon}@2x.png`,
         description: forecastList[i].weather[0].description,
         unit: unitSystem === "metric" ? "C" : "F",
@@ -87,8 +91,11 @@ function Weather(props) {
     return data;
   }
 
+  function changeUnitSystem() {
+    setUnitSystem(unitSystem === "metric" ? "imperial" : "metric");
+  }
+
   if (weatherData.hasData) {
-    console.log(weatherData.data);
     return (
       <div className="Weather">
         <div className="row">
@@ -129,14 +136,16 @@ function Weather(props) {
         </div>
         <WeatherInfo
           weatherData={weatherData}
-          // onChildClick={handleChildClick}
+          onChangeUnitSystem={changeUnitSystem}
         />
-
-        <WeatherForecast forecast={weatherData.data} />
+        <div className="row forecast-section">
+          {weatherData.data.map(function (item) {
+            return <ForecastDetail data={item} />;
+          })}
+        </div>
       </div>
     );
   } else {
-    getCityWeather(city, null, null, unitSystem);
     return <Spinner />;
   }
 }
