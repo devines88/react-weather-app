@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import WeatherInfo from "./WeatherInfo";
+import WeatherForecast from "./WeatherForecast";
 import Spinner from "./Spinner";
 import axios from "axios";
 
 import "./Weather.css";
 
 function Weather(props) {
-  let [city, setCity] = useState(props.city);
-  let [unitSystem, setUnitSystem] = useState(props.unitSystem);
-  let [weatherResults, setWeatherResults] = useState({
-    hasResults: false,
-  });
+  const [city, setCity] = useState(props.city);
+  const [unitSystem, setUnitSystem] = useState(props.unitSystem);
+  const [weatherData, setWeatherData] = useState({ hasData: false });
 
   function updateCity(event) {
     let newCity = event.target.value.trim();
@@ -20,8 +19,8 @@ function Weather(props) {
   }
 
   function getCurrentLocationWeather() {
-    setWeatherResults({
-      hasResults: false,
+    setWeatherData({
+      hasData: false,
     });
     navigator.geolocation.getCurrentPosition(function (position) {
       getCityWeather(
@@ -35,11 +34,10 @@ function Weather(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    setWeatherResults({
-      hasResults: false,
+    setWeatherData({
+      hasData: false,
     });
     if (city) {
-      // setLoading(true);
       getCityWeather(city, null, null, unitSystem);
       event.target.reset();
     }
@@ -58,8 +56,8 @@ function Weather(props) {
   }
 
   function updateWeather(response) {
-    setWeatherResults({
-      hasResults: true,
+    setWeatherData({
+      hasData: true,
       cityName: response.data.city.name,
       temperature: Math.round(response.data.list[0].main.temp),
       unitSystem: unitSystem,
@@ -68,57 +66,79 @@ function Weather(props) {
       wind: Math.round(response.data.list[0].wind.speed),
       dateTime: response.data.list[0].dt,
       weatherIcon: `http://openweathermap.org/img/wn/${response.data.list[0].weather[0].icon}@2x.png`,
+      data: saveForecast(response.data.list),
     });
   }
 
-  return (
-    <div className="Weather">
-      <div className="row">
-        <div className="col mr-0">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <div className="row">
-                <div className="col-6">
+  function saveForecast(forecastList) {
+    let data = [];
+    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    for (let i = 7; i < forecastList.length; i += 8) {
+      let date = new Date(forecastList[i].dt * 1000);
+      data.push({
+        day: days[date.getDay()],
+        temp: forecastList[i].main.temp,
+        icon: `http://openweathermap.org/img/wn/${forecastList[i].weather[0].icon}@2x.png`,
+        description: forecastList[i].weather[0].description,
+        unit: unitSystem === "metric" ? "C" : "F",
+      });
+    }
+    return data;
+  }
+
+  if (weatherData.hasData) {
+    console.log(weatherData.data);
+    return (
+      <div className="Weather">
+        <div className="row">
+          <div className="col mr-0">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <div className="row">
+                  <div className="col-6">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="cityName"
+                      placeholder="Type a city..."
+                      autoComplete="off"
+                      autoFocus="on"
+                      maxLength="100"
+                      onChange={updateCity}
+                    />
+                  </div>
                   <input
-                    type="text"
-                    className="form-control"
-                    id="cityName"
-                    placeholder="Type a city..."
-                    autoComplete="off"
-                    autoFocus="on"
-                    maxLength="100"
-                    onChange={updateCity}
+                    type="submit"
+                    className="btn btn-outline-secondary ml-1 mr-3"
+                    id="search-location"
+                    value="Search"
                   />
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    id="current-location"
+                    onClick={getCurrentLocationWeather}
+                  >
+                    Current City
+                  </button>
                 </div>
-                <input
-                  type="submit"
-                  className="btn btn-outline-secondary ml-1 mr-3"
-                  id="search-location"
-                  value="Search"
-                />
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary"
-                  id="current-location"
-                  onClick={getCurrentLocationWeather}
-                >
-                  Current City
-                </button>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
-      {weatherResults.hasResults ? (
         <WeatherInfo
-          weatherData={weatherResults}
+          weatherData={weatherData}
           // onChildClick={handleChildClick}
         />
-      ) : (
-        <Spinner />
-      )}
-    </div>
-  );
+
+        <WeatherForecast forecast={weatherData.data} />
+      </div>
+    );
+  } else {
+    getCityWeather(city, null, null, unitSystem);
+    return <Spinner />;
+  }
 }
 
 export default Weather;

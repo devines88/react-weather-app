@@ -1,5 +1,5 @@
 .WeatherInfo {
-  margin-top: 3px;
+  margin-top: 5px;
 }
 
 .WeatherInfo .current-city {
@@ -24,12 +24,16 @@
 
 .WeatherInfo .current-temperature,
 .WeatherInfo .weather-stats {
-  margin-top: 20px;
+  margin-top: 15px;
+}
+.WeatherInfo .current-temperature {
+  margin-left: -25px;
 }
 
-.WeatherInfo .weather-stats .row {
+.WeatherInfo .weather-stats {
   font-size: 15px;
   margin-bottom: -3px;
+  margin-left: -50px;
 }
 
 .WeatherInfo .units {
@@ -45,5 +49,5 @@
 
 .WeatherInfo #weather-icon {
   margin-top: -23px;
-  margin-left: -10px;
+  /* margin-left: -20px; */
 }
